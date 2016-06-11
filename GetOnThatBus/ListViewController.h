@@ -10,4 +10,6 @@
 
 @interface ListViewController : UIViewController
 
+@property NSDictionary *busStops;
+
 @end

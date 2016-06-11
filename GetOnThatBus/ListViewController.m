@@ -7,8 +7,12 @@
 //
 
 #import "ListViewController.h"
+#import "DetailViewController.h"
+#import "BusStopAnotation.h"
 
-@interface ListViewController ()
+
+@interface ListViewController () <UITableViewDataSource, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -16,7 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,14 +28,33 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"ListCell"];
+    
+    cell.textLabel.text = self.busStops[@"row"][indexPath.row][@"cta_stop_name"];
+    
+    cell.detailTextLabel.text = self.busStops[@"row"][indexPath.row][@"routes"];
+    
+    return cell;
 }
-*/
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSLog(@"%@", self.busStops[@"row"]);
+    return [self.busStops[@"row"] count];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    DetailViewController *dvc = segue.destinationViewController;
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    
+    dvc.selectedAnnotation = [[BusStopAnotation alloc] initWithDictionary:self.busStops[@"row"][indexPath.row]];
+    
+    //NSLog(@"Passed Dictionary: %@", self.busStops[@"row"][indexPath.row]);
+    
+}
 
 @end

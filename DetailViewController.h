@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+@class BusStopAnotation;
 
 @interface DetailViewController : UIViewController
+
+@property BusStopAnotation *selectedAnnotation;
+
 
 @end
